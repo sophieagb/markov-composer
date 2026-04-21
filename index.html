@@ -13,6 +13,7 @@
   <div class="tabs">
     <button class="tab active" id="tabRecord" onclick="switchTab('record')"> record melody 🎹 </button>
     <button class="tab" id="tabTwinkle" onclick="switchTab('twinkle')"> use twinkle twinkle ⭐ </button>
+    <button class="tab" id="tabBlog" onclick="switchTab('blog')"> about this lab 📝</button>
   </div>
 
   <div id="panelRecord">
@@ -35,6 +36,86 @@
   <div id="panelTwinkle" style="display:none;">
     <div class="section-label">using built-in twinkle twinkle</div>
     <div class="melody-display" id="twinkleDisplay"></div>
+  </div>
+  
+  <div id="panelBlog" style="display:none;">
+    <div class="blog-post">
+      <h3>Teaching a Machine to Improvise: Markov Melody Composer</h1>
+        <p>
+          There's a moment, somewhere between music theory and probability, where things
+          get philosophically weird. I hit that moment while building this lab's Markov
+          Composer. It's a tool that lets you play a melody on a virtual piano, then uses a
+          Markov chain to generate something new in the same "style." On the surface it
+          sounds like a toy. But the deeper you get into implementing it, the more it
+          forces you to confront what musical style actually is.
+        </p>
+
+        <p>
+          The Markov Composer works in two phases. First, you play (or load) a seed
+          melody. The site captures your note sequence as you press keys the
+          piano. Second, you hit "generate & play," and the
+          app builds an nth-order Markov chain from your melody's note
+          transitions, then samples a new sequence from that chain. The whole thing runs
+          in the browser using the Web Audio API. You can also tune two parameters: order (how many previous
+          notes the model looks back at when picking the next one) and temperature (how much randomness is injected into the
+          sampling).
+        </p>
+
+        <h4>What Surprised Me</h4>
+
+        <p>
+          In class, we talked about Markov chains. Specifically we talked about transition matrices,
+          stationarity, the memoryless property. We didn't really talk about was the
+          scheduling problem, which is somwthing I ran into when coding. Web Audio's clock and JavaScript's event loop are
+          two completely different timelines, and keeping them in sync without drift is tricky. Using <code>AudioContext.currentTime</code>
+          as a ground truth and scheduling notes slightly ahead of playback helped resolve this issue. Getting smooth playback taught me more about the
+          Web Audio API's design philosophy than any tutorial had.
+        </p>
+
+        <p>
+          The other surprise was about order. I expected higher-order chains (n=3, n=4)
+          to sound "better" because they capture more melodic context. And in a narrow
+          sense they do. A third-order chain trained on Twinkle Twinkle will reproduce
+          recognizable fragments of it. But "better" and "interesting" are different
+          things. A first-order chain on a short melody you played yourself produces
+          something that feels genuinely generative — unexpected but not random. A
+          fourth-order chain on the same melody mostly just plays the melody back at
+          you with a few notes shuffled. The model has so little data relative to its
+          state space that it gets stuck in loops. This is the classic overfitting
+          problem, but experiencing it <em>musically</em> made it click in a way that
+          loss curves never quite did.
+        </p>
+
+        <h4>Temperature as Creative Tool</h4>
+
+        <p>
+          Temperature was the control I underestimated the most. At 1.0, the model
+          samples proportionally from the transition probabilities it learned. Push it
+          toward 0 and the output gets deterministic: always the most likely next note,
+          which again converges to rote repetition. Push it above 1.5 and the melody
+          loses coherence, jumping across octaves in ways that feel arbitrary. 
+          But in a narrow band around 0.8–1.2, there's a sweet spot
+          where the output has real character. It respects the contour of what you
+          played without slavishly reproducing it. That window is small, which makes me
+          curious whether there's something more principled going on, or whether it's
+          just that human ears are tuned to a particular level of predictability.
+        </p>
+
+        <h4>Where This Points</h4>
+
+        <p>
+          A Markov chain is an extremely simple generative model.
+          It has no concept of rhythm, harmony, or phrasing, just note-to-note
+          transition probabilities. And yet even at this level of simplicity, the gap
+          between "technically correct" and "musically interesting" is wide enough to
+          fall into. Systems like Magenta's Piano Genie close some of that gap by
+          learning richer representations from large corpora of real performances, but
+          the core tension remains: a generative model can only be as expressive as the
+          structure it's capturing. Building this from scratch made that concrete in a
+          way that reading about it doesn't.
+        </p>
+
+    </div>
   </div>
 
   <div class="section-label" style="margin-top:24px;">generate</div>
@@ -62,6 +143,9 @@
     <div class="status" id="statusText">Generated sequence:</div>
     <div class="output-notes" id="outputNotes"></div>
   </div>
+</div> 
+</div> 
+
 
 <script src="script.js"></script>
 </body>
