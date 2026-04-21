@@ -66,7 +66,7 @@
         <p>
           In class, we talked about Markov chains. Specifically we talked about transition matrices,
           stationarity, the memoryless property. We didn't really talk about was the
-          scheduling problem, which is somwthing I ran into when coding. Web Audio's clock and JavaScript's event loop are
+          scheduling problem, which is something I ran into when coding. Web Audio's clock and JavaScript's event loop are
           two completely different timelines, and keeping them in sync without drift is tricky. Using <code>AudioContext.currentTime</code>
           as a ground truth and scheduling notes slightly ahead of playback helped resolve this issue. Getting smooth playback taught me more about the
           Web Audio API's design philosophy than any tutorial had.
@@ -78,12 +78,11 @@
           sense they do. A third-order chain trained on Twinkle Twinkle will reproduce
           recognizable fragments of it. But "better" and "interesting" are different
           things. A first-order chain on a short melody you played yourself produces
-          something that feels genuinely generative — unexpected but not random. A
+          something that feels generative like unexpected but not random. A
           fourth-order chain on the same melody mostly just plays the melody back at
           you with a few notes shuffled. The model has so little data relative to its
           state space that it gets stuck in loops. This is the classic overfitting
-          problem, but experiencing it <em>musically</em> made it click in a way that
-          loss curves never quite did.
+          problem in machine learning!
         </p>
 
         <h4>Temperature as Creative Tool</h4>
@@ -94,7 +93,7 @@
           toward 0 and the output gets deterministic: always the most likely next note,
           which again converges to rote repetition. Push it above 1.5 and the melody
           loses coherence, jumping across octaves in ways that feel arbitrary. 
-          But in a narrow band around 0.8–1.2, there's a sweet spot
+          But in a narrow band around 0.8 - 1.2, there's a sweet spot
           where the output has real character. It respects the contour of what you
           played without slavishly reproducing it. That window is small, which makes me
           curious whether there's something more principled going on, or whether it's
@@ -105,14 +104,12 @@
 
         <p>
           A Markov chain is an extremely simple generative model.
-          It has no concept of rhythm, harmony, or phrasing, just note-to-note
-          transition probabilities. And yet even at this level of simplicity, the gap
+          It has no concept of rhythm, harmony, or phrasing. And yet even at this level of simplicity, the gap
           between "technically correct" and "musically interesting" is wide enough to
           fall into. Systems like Magenta's Piano Genie close some of that gap by
           learning richer representations from large corpora of real performances, but
           the core tension remains: a generative model can only be as expressive as the
-          structure it's capturing. Building this from scratch made that concrete in a
-          way that reading about it doesn't.
+          structure it's capturing.
         </p>
 
     </div>
