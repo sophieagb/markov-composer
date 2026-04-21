@@ -108,14 +108,30 @@ function playRecorded(){
 
 function switchTab(tab){
   currentTab=tab;
-  document.getElementById('tabRecord').classList.toggle('active',tab==='record');
-  document.getElementById('tabTwinkle').classList.toggle('active',tab==='twinkle');
-  document.getElementById('panelRecord').style.display=tab==='record'?'':'none';
-  document.getElementById('panelTwinkle').style.display=tab==='twinkle'?'':'none';
+
+  document.getElementById('tabRecord')?.classList.toggle('active', tab === 'record');
+  document.getElementById('tabTwinkle')?.classList.toggle('active', tab === 'twinkle');
+  document.getElementById('tabBlog')?.classList.toggle('active', tab === 'blog');
+
+  document.getElementById('panelRecord')?.style.setProperty('display', tab === 'record' ? '' : 'none');
+  document.getElementById('panelTwinkle')?.style.setProperty('display', tab === 'twinkle' ? '' : 'none');
+  document.getElementById('panelBlog')?.style.setProperty('display', tab === 'blog' ? '' : 'none');
+  
   if(tab==='twinkle'){
     const el=document.getElementById('twinkleDisplay');
     el.innerHTML=TWINKLE.map(n=>`<span class="melody-note">${n}</span>`).join('');
   }
+
+  // hide generate section on blog tab
+  const generateSection = document.querySelector('.section-label[style*="margin-top"]');
+  const controlsRow = document.querySelector('.controls-row');
+  const btnRow = document.querySelectorAll('.btn-row')[1]; // second btn-row (generate buttons)
+  const outputSection = document.getElementById('outputSection');
+
+  const showGenerate = tab !== 'blog';
+  [generateSection, controlsRow, btnRow, outputSection].forEach(el => {
+    if (el) el.style.display = showGenerate ? '' : 'none';
+  });
 }
 
 function buildChain(notes,order){
